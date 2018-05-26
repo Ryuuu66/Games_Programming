@@ -15,7 +15,7 @@ CollisionManager::CollisionManager(std::vector<Player*>* players, std::vector<En
 void CollisionManager::CheckCollisions()
 {
 	// Check all collisions
-
+	PlayerToEnemy();
 
 
 	// Move all current collisions into previous
@@ -55,4 +55,56 @@ void CollisionManager::AddCollision(GameObject* first, GameObject* second)
 	m_currentCollisions[m_nextCurrentCollisionSlot + 1] = second;
 
 	m_nextCurrentCollisionSlot += 2;
+}
+
+void CollisionManager::PlayerToEnemy()
+{
+	// Here we check each player against each enemy
+	for (unsigned int i = 0; i < m_players->size(); i++)
+	{
+		for (unsigned int j = 0; j < m_enemies->size(); j++)
+		{
+			// Don't need to store pointer to these objects again but favouring clarity
+			// Can't index into these directly as they're a pointer to a vector. We need to dereference them first
+			Player* player = (*m_players)[i];
+			Enemy* enemy = (*m_enemies)[j];
+
+			CBoundingBox playerBounds = player->GetBounds();
+			CBoundingBox enemyBounds = enemy->GetBounds();
+
+			// Are they colliding this frame?
+			bool isColliding = CheckCollision(playerBounds, enemyBounds);
+
+			// Were they colliding last frame?
+			bool wasColliding = ArrayContainsCollision(m_previousCollisions, player, enemy);
+
+			// For this part, enemy doesn't need to know it collides with a player
+			// But a player must know it collides with an enemy
+			if (isColliding)
+			{
+				// Register the collision
+				AddCollision(player, enemy);
+
+				if (wasColliding)
+				{
+					// Collision Stay
+					player->OnEnemyCollisionStay(enemy);
+				}
+				else
+				{
+					// Collision Enter
+					player->OnEnemyCollisionEnter(enemy);
+				}
+			}
+			else
+			{
+				if (wasColliding)
+				{
+					// Collision Exit
+					player->OnEnemyCollisionExit(enemy);
+				}
+
+			}
+		}
+	}
 }

@@ -27,6 +27,11 @@ private:
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indexBuffer;
 
+	Vector3 m_minVector;	//For our bounding boxes we need to know the min position of the mesh...
+	Vector3 m_maxVector;	//... and the max position
+	Vector3 m_centre;		//For the bounding spheres we need to know the centre point...
+	float m_radius;			//... and the overall radius.
+
 	Mesh();
 	~Mesh();
 	bool Load(Direct3D* renderer, const char* filename);
@@ -49,8 +54,12 @@ public:
 
 	int GetVertexCount() { return m_vertexCount; }
 	int GetIndexCount() { return m_indexCount; }
-
 	const char* GetFilename() { return m_filename; }	
+
+	Vector3 GetMin() { return m_minVector; }
+	Vector3 GetMax() { return m_maxVector; }
+	Vector3 GetCentre() { return m_centre; }
+	float GetRadius() { return m_radius; }
 
 	// The MeshManager can access our private members and functions
 	friend class MeshManager;

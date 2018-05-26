@@ -16,6 +16,7 @@
 #include "Enemy.h"
 #include "FirstPersonCamera.h"
 #include "InputController.h"
+#include "CollisionManager.h"
 #include "MeshManager.h"
 #include "TextureManager.h"
 #include "GameObject.h"
@@ -54,12 +55,17 @@ private:
 	InputController* m_input;	
 	MeshManager* m_meshManager;
 	TextureManager* m_textureManager;
+	CollisionManager* m_collisionManager;
 
 	Shader* m_diffuseTexturedShader;
 
 	// Our game data. The Game class only needs to manage three objects for this game.
 	GameBoard* m_gameBoard;
 	Player* m_player;
+
+	std::vector<Player*> m_players;
+	std::vector<Enemy*> m_enemies;
+	std::vector<Bullet*> m_bullets;
 	
 	
 
@@ -90,9 +96,6 @@ private:
 	void RefreshUI();
 
 	
-
-
-
 	void CheckGameOver();
 
 public:

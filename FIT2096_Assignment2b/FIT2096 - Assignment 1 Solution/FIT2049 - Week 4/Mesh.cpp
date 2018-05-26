@@ -431,6 +431,37 @@ bool Mesh::Load(Direct3D* renderer, const char* filename)
 		return false;
 	}
 
+	// For Bounding Box
+	float minX = 0, minY = 0, minZ = 0;
+	float maxX = 0, maxY = 0, maxZ = 0;
+
+	for (int i = 0; i < finalVertexCount; i++)
+	{
+		Vector3 currentPos = vertexData[i].position;
+
+		if (currentPos.x > maxX)
+			maxX = currentPos.x;
+		else if (currentPos.x < minX)
+			minX = currentPos.x;
+
+		if (currentPos.y > maxY)
+			maxY = currentPos.y;
+		else if (currentPos.y < minY)
+			minY = currentPos.y;
+
+		if (currentPos.z > maxZ)
+			maxZ = currentPos.z;
+		else if (currentPos.z < minZ)
+			minZ = currentPos.z;
+	}
+
+	m_minVector = Vector3(minX, minY, minZ);
+	m_maxVector = Vector3(maxX, maxY, maxZ);
+
+	m_radius = (m_maxVector - m_minVector).Length() / 2.0f; // Radius is half the distance between min and max
+	m_centre = (m_maxVector - m_minVector) / 2;
+	// End Bounding Box
+
 	//Now that the buffers are created we can delete all of the data we loaded!
 	if (verts)
 	{

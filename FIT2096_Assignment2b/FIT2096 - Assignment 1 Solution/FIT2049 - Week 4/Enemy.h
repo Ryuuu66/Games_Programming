@@ -4,6 +4,7 @@
 #define ENEMY_H
 
 #include "GameObject.h"
+#include "Bullet.h"
 
 class Enemy : public GameObject
 {
@@ -13,18 +14,22 @@ private:
 	int m_health;
 	int m_skill;
 	bool m_isAlive;
+	CBoundingBox m_boundingBox;
 
 	// Use them to make sure the enemy choose a point on the board
-	int Board_Width;  
-	int Board_Height;
+	float Board_Width;  
+	float Board_Height;
 
 	// The movement of enemy
+	Vector3 m_randomPoint;
+	bool isMoving = false;
 	float m_moveSpeed;
 	int m_moveLogic;
 
 	// Enemy must look at the player
 	Vector3 m_playerPosition;
 
+	float RandomRange(float min, float max);
 
 public:
 
@@ -50,10 +55,12 @@ public:
 	bool IsAlive() { return m_isAlive; }
 	int GetSkill() { return m_skill; }
 	Vector3 GetPlayerPosition() { return m_playerPosition; }
+	CBoundingBox GetBounds() { return m_boundingBox; }
 
 	// Mutators
 	void SetPlayerPosition(Vector3 newPos) { m_playerPosition = newPos; }
-
+	void SetBoardWidth(int width) { Board_Width = (float) width; }
+	void SetBoardHeight(int height) { Board_Height = (float) height; }
 };
 
 

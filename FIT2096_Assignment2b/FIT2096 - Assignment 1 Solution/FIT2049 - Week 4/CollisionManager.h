@@ -13,9 +13,11 @@
 class CollisionManager
 {
 private:
-	// Check collision of player, enemies, bullets, healthpacks, walls
+	// Check collision of player, enemies, bullets, healthpacks, walls, etc
 	std::vector<Player*>* m_players;
 	std::vector<Enemy*>* m_enemies;
+	std::vector<Bullet*>* m_bullets;
+	std::vector<HealthPack*>* m_healthPacks;
 
 	GameObject* m_currentCollisions[MAX_ALLOWED_COLLISIONS];
 
@@ -31,11 +33,13 @@ private:
 	void AddCollision(GameObject* first, GameObject* second);
 
 	// Collision check helpers
-	void KartToItemBox();
-	void KartToKart();
+	void PlayerToEnemy();
+	void PlayerToBullet();
+	void PlayerToHealthPack();
+	void EnemyToBullet();
 
 public:
-	CollisionManager(std::vector<Player*>* karts, std::vector<Enemy*>* itemBoxes);
+	CollisionManager(std::vector<Player*>* players, std::vector<Enemy*>* enemies);
 	void CheckCollisions();
 
 };

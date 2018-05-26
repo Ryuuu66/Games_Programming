@@ -64,6 +64,8 @@ bool Game::Initialise(Direct3D* renderer, AudioSystem* audio, InputController* i
 	RefreshUI();
 
 
+	m_collisionManager = new CollisionManager(&m_players, &m_enemies);
+
 	// Create the camera after player has appeared
 	//m_currentCam = new Camera();  // For third person view
 	m_currentCam = new FirstPersonCamera(m_input, m_player->GetPosition() + Vector3(0.0f, 5.0f, 0.0f));  // For first person view
@@ -186,7 +188,6 @@ void Game::InitGameWorld()
 	// We pass it the Mesh and Texture managers as it will be creating tiles and walls
 	m_gameBoard = new GameBoard(m_meshManager, m_textureManager, m_diffuseTexturedShader);
 
-	
 
 	// A player will select a random starting position.
 	// We need to tell the player about the board it is standing on so it can validate movement
@@ -196,6 +197,11 @@ void Game::InitGameWorld()
 						  m_textureManager->GetTexture("Assets/Textures/tile_white.png"),
 						  m_input,
 						  m_gameBoard);
+
+	m_players.push_back(m_player);
+
+	// So the game can pass the enemy vector to the collision manager
+	m_enemies = m_gameBoard->getEnemyVector();
 
 }
 
@@ -218,7 +224,11 @@ void Game::Update(float timestep)
 	m_gameBoard->SetCurrentPlayerPosition(m_player->GetPosition());
 	m_gameBoard->Update(timestep);
 
-	// The moves remaining bar doesn't need updating as it does nothing
+	// Check collisions
+	if (m_collisionManager)
+	{
+		m_collisionManager->CheckCollisions();
+	}
 
 	CheckGameOver();
 

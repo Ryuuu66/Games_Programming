@@ -23,6 +23,8 @@ Player::Player(Mesh* mesh, Shader* shader, Texture* texture, InputController* in
 	m_monstersDefeated = 0;
 
 	TeleportToTileOfType(TileType::NORMAL);
+
+	m_boundingBox = CBoundingBox(m_position + m_mesh->GetMin(), m_position + m_mesh->GetMax());
 }
 
 Player::~Player() {}
@@ -69,6 +71,9 @@ void Player::Update(float timestep)
 		m_position += localRight * m_moveSpeed * timestep;
 	}
 
+	// Keep bounds up to date with position
+	m_boundingBox.SetMin(m_position + m_mesh->GetMin());
+	m_boundingBox.SetMax(m_position + m_mesh->GetMax());
 
 	/*
 	// Constantly step towards target position
@@ -317,3 +322,23 @@ void Player::DoBattle(Enemy* currentEnemy)
 		m_monstersDefeated += 1;
 	}
 }
+
+// Collisions
+void Player::OnEnemyCollisionEnter(Enemy* other)
+{
+	OutputDebugString("Player-Enemy Collision Enter\n");
+
+	// Player got instant killed here
+	m_health = 0;
+}
+
+void Player::OnEnemyCollisionStay(Enemy* other)
+{
+	OutputDebugString("Player-Enemy Collision Stay\n");
+}
+
+void Player::OnEnemyCollisionExit(Enemy* other)
+{
+	OutputDebugString("Player-Enemy Collision Exit\n");
+}
+

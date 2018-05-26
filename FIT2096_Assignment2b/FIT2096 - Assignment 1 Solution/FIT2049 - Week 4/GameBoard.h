@@ -25,22 +25,24 @@ private:
 	const static int BOARD_WIDTH = 30;
 	const static int BOARD_HEIGHT = 30;
 
-	std::vector<HealthPack*> m_healthPacks;  // A vector of health packs
-	void GenerateHealthPacks();  // Generate health packs on all health tiles
-
-	Vector3 currentPlayerPosition;  // Need this to rotate the enemies
-
-
+	// Game objects handled by GameBoard
 	std::vector<Enemy*> m_enemies;  // A vector of enemies
-	void GenerateEnemies();  // Generate five enemies
-	void PutEnemies();       // Put enemies on enemy tiles
-	int enemyTileCount = 0; // Keep track of how many enemy tile has been spawned
-
+	std::vector<Bullet*> m_bullets;  // A vector of bullets
+	std::vector<HealthPack*> m_healthPacks;  // A vector of health packs
+	
 	// Storing tiles in a 2D array to make neighbour checking easier
 	Tile* m_tiles[BOARD_HEIGHT][BOARD_WIDTH];
 
-	void Generate();
-	void AddWalls();
+	Vector3 currentPlayerPosition;  // Need this to rotate the enemies
+
+	void Generate();  // Generate the ground
+	void AddWalls();  // Called in the function above, to generate the walls
+
+	void GenerateEnemies();  // Generate five enemies
+	void PutEnemies();       // Put enemies on enemy tiles
+	int enemyTileCount = 0;  // Keep track of how many enemy tile has been spawned
+
+	void GenerateHealthPacks();  // Generate health packs on all health tiles
 	
 public:
 	GameBoard();
@@ -64,6 +66,8 @@ public:
 	// Accessors
 	Vector3 GetCurrentPlayerPosition() { return currentPlayerPosition; }
 	int GetEnemyTileCount() { return enemyTileCount; }
+
+	std::vector<Enemy*> getEnemyVector() { return m_enemies; }
 
 };
 

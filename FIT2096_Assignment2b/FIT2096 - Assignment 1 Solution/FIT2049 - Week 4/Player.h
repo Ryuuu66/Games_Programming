@@ -89,6 +89,10 @@ public:
 	// Game will use these to output info to the player
 	int GetNumberOfMonstersDefeated() { return m_monstersDefeated; }
 	int GetScore() { return m_score; }
+
+	// Accessors
+	CBoundingBox GetBounds() { return m_boundingBox; }
+
 };
 
 #endif

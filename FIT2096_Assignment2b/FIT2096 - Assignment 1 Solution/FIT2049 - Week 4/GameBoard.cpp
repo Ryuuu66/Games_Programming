@@ -303,6 +303,12 @@ void GameBoard::GenerateEnemies()
 
 	m_enemies.push_back(new Enemy(90, 10, 5, m_meshManager->GetMesh("Assets/Meshes/enemy.obj"),
 		m_texturedShader, m_textureManager->GetTexture("Assets/Textures/gradient_redPink.png")));
+
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_enemies[i]->SetBoardWidth(BOARD_WIDTH);
+		m_enemies[i]->SetBoardHeight(BOARD_HEIGHT);
+	}
 }
 
 void GameBoard::PutEnemies()
