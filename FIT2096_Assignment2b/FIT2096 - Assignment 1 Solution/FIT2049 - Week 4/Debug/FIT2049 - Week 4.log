@@ -1,0 +1,5 @@
+﻿  Game.cpp
+d:\geraint lau\monash_uni\my_units\fit2096\assignment2b\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(393): warning C4838: conversion from 'float' to 'LONG' requires a narrowing conversion
+d:\geraint lau\monash_uni\my_units\fit2096\assignment2b\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(393): warning C4244: 'initializing': conversion from 'float' to 'LONG', possible loss of data
+d:\geraint lau\monash_uni\my_units\fit2096\assignment2b\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(411): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  FIT2049 - Week 4.vcxproj -> D:\Geraint Lau\Monash_Uni\My_Units\FIT2096\Assignment2b\FIT2096_Assignment2b\FIT2096 - Assignment 1 Solution\Debug\FIT2096 - Week 4 Base.exe

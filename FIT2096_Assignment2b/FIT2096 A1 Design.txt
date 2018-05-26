@@ -1,0 +1,40 @@
+(rough notes made before coding began)
+
+Player
+	- listens for input and moves itself around the board
+	- asks the GameBoard if it can move to a particular tile
+	- has a target position, which it LERPS to in Update
+	- input just extends the target position
+	- Has a moves remaining bar which it moves with it
+	- Checks if it is trapped after each turn (asks the GameBoard for type of surrounding tiles)
+	- Has CanMoveHere() which asks GameBoard about type of target tile
+	- Reacts to tile it just stepped on. 
+
+GameBoard
+	- generates the map
+	- will need the mesh and texture managers as it will be creating Tile objects
+	- manages Tiles using a 2D array of Tile objects
+		- calls update and render on each tile
+	- exposes GetTileTypeForPosition(int, int) which the Player calls
+		- indexes into 2D array using player's position directly
+	- exposes GetRandomTileOfType(TileType)
+		- for spawning player on white tile, and teleporting to blue tile
+	- exposes DeactivateTile(int, int) which Player calls
+	
+Tile
+	- has a type enum (including "wall")
+	- picks its own colour
+	- falls down from the sky once created - LOW PRIORITY
+	- needs the TextureManager so it can fetch its own textures
+
+Game
+	- Initialises assets
+	- Updates the Player, GameBoard
+
+ProgressBar can be a StaticObject (even though it moves)
+	- should NOT be another instance of Player
+	- Player tells it where to go each frame (like a parent-child relationship)
+
+Checking GameOver
+	- could implement observer pattern so Player can talk back to Game
+	- keep it simple - Game will ask the player each frame for health, isTrapped etc
