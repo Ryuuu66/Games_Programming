@@ -24,6 +24,8 @@ Player::Player(Mesh* mesh, Shader* shader, Texture* texture, InputController* in
 
 	TeleportToTileOfType(TileType::NORMAL);
 
+	m_bullets = m_currentBoard->getBulletVector();
+
 	m_boundingBox = CBoundingBox(m_position + m_mesh->GetMin(), m_position + m_mesh->GetMax());
 }
 
@@ -69,6 +71,11 @@ void Player::Update(float timestep)
 	{
 		// Move along our local right vector
 		m_position += localRight * m_moveSpeed * timestep;
+	}
+	// Left mouse button to shoot
+	if (m_input->GetMouseDown(0))
+	{
+		Shoot();
 	}
 
 	// Keep bounds up to date with position
@@ -154,8 +161,6 @@ void Player::FinishTurn()
 
 
 	// React to tile we're standing on
-	ReactToTile();
-	CheckIfTrapped();
 
 }
 
@@ -169,50 +174,6 @@ bool Player::CanMoveHere(Vector3 target)
 	return targetTileType != TileType::DISABLED &&
 		   targetTileType != TileType::WALL &&
 		   targetTileType != TileType::INVALID;
-}
-
-void Player::CheckIfTrapped()
-{
-	// Using our target position, ask the GameBoard for the type of 
-	// our surrounding tiles and check if we are surrounded by walls or grey tiles
-
-	m_isTrapped = !CanMoveHere(m_targetPosition + Vector3(0, 0, 1)) &&  // Above
-				  !CanMoveHere(m_targetPosition + Vector3(0, 0, -1)) && // Below
-				  !CanMoveHere(m_targetPosition + Vector3(-1, 0, 0)) && // Left
-				  !CanMoveHere(m_targetPosition + Vector3(1, 0, 0));    // Right
-}
-
-void Player::ReactToTile()
-{
-	TileType targetTileType = m_currentBoard->GetTileTypeForPosition(m_targetPosition.x, m_targetPosition.z);
-
-	switch (targetTileType)
-	{
-	case TileType::HEALTH:
-		// Deactivate the healthpack at target position
-		m_currentBoard->GetHealthPack(m_targetPosition)->SetIsUsed(true);
-
-		m_health += 5;
-		break;
-	case TileType::DAMAGE:
-		m_health -= 10;
-		break;
-	case TileType::TELEPORT:
-		TeleportToTileOfType(TileType::TELEPORT);
-		break;
-	case TileType::MONSTER_VAR1:
-
-	//case TileType::MONSTER_VAR2:  // We only need one monster tile in this game
-		// We'll react the same to both types of monster. TODO how could we differentiate them?
-		if (m_currentBoard->GetEnemy(m_targetPosition) != NULL)
-		{
-			DoBattle(m_currentBoard->GetEnemy(m_targetPosition));
-		}
-		// DoMonsterBattle();
-		break;
-	default:
-		break;
-	}
 }
 
 void Player::TeleportToTileOfType(TileType type)
@@ -320,6 +281,47 @@ void Player::DoBattle(Enemy* currentEnemy)
 	{
 		m_score += currentEnemy->GetSkill();
 		m_monstersDefeated += 1;
+	}
+}
+
+// The shoot function of a player
+void Player::Shoot()
+{
+	Bullet* the_bullet = NULL;
+
+	for (int i = 0; i < m_bullets.size(); i++)
+	{
+		if (m_bullets[i]->GetBeingUsed() == false)
+		{
+			the_bullet = m_bullets[i];
+			break;
+		}
+	}
+
+	if (the_bullet)
+	{
+		Vector3 m_offset = Vector3(0.0f, 0.0f, 1.0f);    // The offset for player bullet
+		
+		Vector3 m_view = m_position + Vector3(0, 1, 0);  // This is the position of the camera
+
+		Matrix heading = Matrix::CreateRotationY(m_rotY);
+
+		Matrix lookAtRotation = heading;
+
+		// The offset is still based on the world local, transform it into player's local
+		Vector3 spawnAt = Vector3::TransformNormal(m_offset, lookAtRotation);
+
+		spawnAt += m_view;                               // Now it is a point slightly in front of the player
+
+		Vector3 flyTowards = Vector3::TransformNormal(Vector3(0, 0, 10), heading);  // This is the direction player is facing
+
+		the_bullet->SetPosition(spawnAt);                // Need to add some offset so the bullet appear in front of player and will not trigger hitbox
+		                                                 
+		the_bullet->SetFlyTowards(flyTowards);           // Fly towards the direction player is facing
+
+		the_bullet->SetYRotation(m_rotY);                // Rotate the bullet to the correct direction
+
+		the_bullet->SetBeingUsed(true);  // So the bullet will start updating
 	}
 }
 

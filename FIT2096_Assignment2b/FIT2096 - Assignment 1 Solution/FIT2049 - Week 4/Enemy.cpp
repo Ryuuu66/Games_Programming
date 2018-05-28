@@ -7,6 +7,10 @@ Enemy::Enemy()
 	m_health = 100;
 	m_skill = MathsHelper::RandomRange(3, 10);
 	m_isAlive = true;
+
+	m_isMoving = false;
+
+	shootCounter = 5.0f;
 }
 
 Enemy::Enemy(int newHealth, int newSkill, Mesh* mesh, Shader* shader, Texture* texture)
@@ -21,6 +25,9 @@ Enemy::Enemy(int newHealth, int newSkill, Mesh* mesh, Shader* shader, Texture* t
 
 	m_moveSpeed = 0.001f;
 	m_moveLogic = 0;
+	m_isMoving = false;
+
+	shootCounter = 5.0f;
 }
 
 Enemy::Enemy(int newHealth, int newSkill, int newMoveLogic, Mesh* mesh, Shader* shader, Texture* texture)
@@ -36,6 +43,8 @@ Enemy::Enemy(int newHealth, int newSkill, int newMoveLogic, Mesh* mesh, Shader* 
 
 	m_boundingBox = CBoundingBox(m_position + m_mesh->GetMin(), m_position + m_mesh->GetMax());
 
+	shootCounter = 5.0f;
+	m_isMoving = false;
 	m_moveLogic = newMoveLogic;
 	// Move speed of enemy depends on their move logic
 	if (m_moveLogic == 1)
@@ -117,6 +126,15 @@ void Enemy::Update(float timestep)
 		move5();
 	}
 
+	// Handle the shooting of enemy
+	shootCounter -= timestep;
+
+	if (shootCounter <= 0.0f)
+	{
+		Shoot();
+		shootCounter = 5.0f;
+	}
+
 	// Keep bounds up to date with position
 	m_boundingBox.SetMin(m_position + m_mesh->GetMin());
 	m_boundingBox.SetMax(m_position + m_mesh->GetMax());
@@ -129,7 +147,7 @@ void Enemy::move1()
 
 	if (distanceToPlayer >= 0.01f)
 	{
-		isMoving = true;
+		m_isMoving = true;
 
 		Vector3 directionToPlayer = m_playerPosition - m_position;
 
@@ -139,14 +157,14 @@ void Enemy::move1()
 	}
 	else
 	{
-		isMoving = false;
+		m_isMoving = false;
 	}
 }
 
 // Constantly run away from the player
 void Enemy::move2()
 {
-	isMoving = true;
+	m_isMoving = true;
 
 	Vector3 directionToPlayer = m_playerPosition - m_position;
 
@@ -158,7 +176,7 @@ void Enemy::move2()
 // Constantly moving to a random point on the board
 void Enemy::move3()
 {
-	if (isMoving)
+	if (m_isMoving)
 	{
 		Vector3 directionToPoint = m_randomPoint - m_position;
 		directionToPoint.Normalize();
@@ -168,13 +186,13 @@ void Enemy::move3()
 		// Stop moving if close enough
 		if (distanceToPoint <= 0.01f)
 		{
-			isMoving = false;
+			m_isMoving = false;
 		}
 	}
-	else if (!isMoving)
+	else if (!m_isMoving)
 	{
 		// Generate a random point
-		isMoving = true;
+		m_isMoving = true;
 
 		float pointX = RandomRange(1.0, Board_Width);
 		float pointZ = RandomRange(1.0, Board_Height);
@@ -190,7 +208,7 @@ void Enemy::move4()
 
 	if (distanceToPlayer >= 5.0f)
 	{
-		isMoving = true;
+		m_isMoving = true;
 
 		Vector3 directionToPlayer = m_playerPosition - m_position;
 
@@ -200,7 +218,7 @@ void Enemy::move4()
 	}
 	else
 	{
-		isMoving = false;
+		m_isMoving = false;
 	}
 }
 
@@ -209,7 +227,7 @@ void Enemy::move5()
 {
 	float distanceToPlayer = Vector3::Distance(m_playerPosition, m_position);
 
-	if (isMoving)
+	if (m_isMoving)
 	{
 		Vector3 directionToPoint = m_randomPoint - m_position;
 		directionToPoint.Normalize();
@@ -219,13 +237,13 @@ void Enemy::move5()
 		// Stop moving if close enough
 		if (distanceToPoint <= 0.01f)
 		{
-			isMoving = false;
+			m_isMoving = false;
 		}
 	}
-	else if (!isMoving && distanceToPlayer <= 5.0f)
+	else if (!m_isMoving && distanceToPlayer <= 5.0f)
 	{
 		// Generate a random point
-		isMoving = true;
+		m_isMoving = true;
 
 		float pointX = RandomRange(1.0, Board_Width);
 		float pointZ = RandomRange(1.0, Board_Height);
@@ -234,7 +252,44 @@ void Enemy::move5()
 	}
 }
 
+void Enemy::Shoot()
+{
+	Bullet* the_bullet = NULL;
 
+	for (int i = 0; i < m_bullets.size(); i++)
+	{
+		if (m_bullets[i]->GetBeingUsed() == false)
+		{
+			the_bullet = m_bullets[i];
+			break;
+		}
+	}
+
+	if (the_bullet)
+	{
+		// Offset from pivot of enemy to the gun
+		Vector3 m_offset = Vector3(-0.133f, 1.2f, 0.137f);
+
+		Matrix heading = Matrix::CreateRotationY(m_rotY);
+
+		Matrix lookAtRotation = heading;
+
+		// The offset is still based on the world local, transform it into enemy's local
+		Vector3 spawnAt = Vector3::TransformNormal(m_offset, lookAtRotation);
+
+		spawnAt += m_position;
+
+		Vector3 flyTowards = Vector3::TransformNormal(Vector3(0, 0, 10), heading);  // This is the direction enemy is facing
+
+		the_bullet->SetPosition(spawnAt);                // Need to add some offset so the bullet appear in front of player and will not trigger hitbox
+
+		the_bullet->SetFlyTowards(flyTowards);           // Fly towards the direction player is facing
+
+		the_bullet->SetYRotation(m_rotY);                // Rotate the bullet to the correct direction
+
+		the_bullet->SetBeingUsed(true);  // So the bullet will start updating
+	}
+}
 
 float Enemy::RandomRange(float min, float max)
 {
@@ -245,4 +300,22 @@ float Enemy::RandomRange(float min, float max)
 
 	return ((rand() / float(RAND_MAX)) * (max - min)) + min;
 }
+
+// Collisions
+void Enemy::OnBulletCollisionEnter(Bullet* other)
+{
+	OutputDebugString("Enemy-Bullet Collision Enter\n");
+}
+
+void Enemy::OnBulletCollisionStay(Bullet* other)
+{
+	OutputDebugString("Enemy-Bullet Collision Stay\n");
+}
+
+void Enemy::OnBulletCollisionExit(Bullet* other)
+{
+	OutputDebugString("Enemy-Bullet Collision Exit\n");
+}
+
+
 

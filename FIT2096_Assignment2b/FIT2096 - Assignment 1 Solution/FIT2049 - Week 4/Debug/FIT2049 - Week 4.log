@@ -1,31 +1,38 @@
 ﻿  Window.cpp
   Player.cpp
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\player.cpp(167): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\player.cpp(187): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\player.cpp(172): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\player.cpp(292): warning C4018: '<': signed/unsigned mismatch
   Main.cpp
   GameBoard.cpp
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(40): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(46): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(66): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(77): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(98): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(106): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(134): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(187): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(194): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(205): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(212): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(307): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(316): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(333): warning C4018: '<': signed/unsigned mismatch
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(368): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(43): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(49): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(55): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(75): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(94): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(112): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(120): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(128): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(153): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(206): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(213): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(224): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(231): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(326): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(337): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(354): warning C4018: '<': signed/unsigned mismatch
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\gameboard.cpp(389): warning C4018: '<': signed/unsigned mismatch
   Game.cpp
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(403): warning C4838: conversion from 'float' to 'LONG' requires a narrowing conversion
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(403): warning C4244: 'initializing': conversion from 'float' to 'LONG', possible loss of data
-c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(421): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(394): warning C4838: conversion from 'float' to 'LONG' requires a narrowing conversion
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(394): warning C4244: 'initializing': conversion from 'float' to 'LONG', possible loss of data
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\game.cpp(412): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   FirstPersonCamera.cpp
 c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\firstpersoncamera.cpp(46): warning C4305: 'argument': truncation from 'double' to 'float'
   Enemy.cpp
+c:\users\user\documents\github\games_programming\fit2096_assignment2b\fit2096 - assignment 1 solution\fit2049 - week 4\enemy.cpp(259): warning C4018: '<': signed/unsigned mismatch
   CollisionManager.cpp
+  Generating Code...
+  Compiling...
+  Bullet.cpp
   Generating Code...
   FIT2049 - Week 4.vcxproj -> C:\Users\user\Documents\GitHub\Games_Programming\FIT2096_Assignment2b\FIT2096 - Assignment 1 Solution\Debug\FIT2096 - Week 4 Base.exe

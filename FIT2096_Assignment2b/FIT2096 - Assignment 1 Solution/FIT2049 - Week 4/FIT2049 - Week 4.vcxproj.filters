@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{69d3adde-7ab0-49bd-8c48-0411544bd603}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\GameObjects\Character">
+      <UniqueIdentifier>{e042d071-7003-4a6b-81d2-d440a0239099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\GameObjects\Character">
+      <UniqueIdentifier>{1f287c02-8e90-4073-ad09-c03d2ffa8771}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">
@@ -84,9 +90,6 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -97,9 +100,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="FirstPersonCamera.cpp">
@@ -131,6 +131,12 @@
     </ClCompile>
     <ClCompile Include="AudioSystem.cpp">
       <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Game\GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Game\GameObjects\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +191,6 @@
     <ClInclude Include="MathsHelper.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -195,9 +198,6 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="Monster.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="FirstPersonCamera.h">
@@ -235,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="AudioSystem.h">
       <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Game\GameObjects\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Game\GameObjects\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

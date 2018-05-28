@@ -15,6 +15,9 @@ GameBoard::GameBoard(MeshManager* meshManager, TextureManager* textureManager, S
 	m_textureManager = textureManager;
 	m_texturedShader = tileShader;
 	
+	// Generate Bullets
+	GenerateBullets();
+
 	// Generate GameBoard
 	Generate();
 	// Generate enemies
@@ -47,6 +50,12 @@ GameBoard::~GameBoard()
 	{
 		delete m_healthPacks[i];
 		m_healthPacks[i] = NULL;
+	}
+	// Delete bullets
+	for (int i = 0; i < m_bullets.size(); i++)
+	{
+		delete m_bullets[i];
+		m_bullets[i] = NULL;
 	}
 }
 
@@ -81,6 +90,11 @@ void GameBoard::Update(float timestep)
 			m_healthPacks[i]->Update(timestep);
 		}
 	}
+	// Update Bullets
+	for (int i = 0; i < m_bullets.size(); i++)
+	{
+		m_bullets[i]->Update(timestep);
+	}
 }
 
 void GameBoard::Render(Direct3D* renderer, Camera* camera)
@@ -109,6 +123,11 @@ void GameBoard::Render(Direct3D* renderer, Camera* camera)
 		{
 			m_healthPacks[i]->Render(renderer, camera);
 		}
+	}
+	// Render bullets
+	for (int i = 0; i < m_bullets.size(); i++)
+	{
+		m_bullets[i]->Render(renderer, camera);	
 	}
 }
 
@@ -308,6 +327,8 @@ void GameBoard::GenerateEnemies()
 	{
 		m_enemies[i]->SetBoardWidth(BOARD_WIDTH);
 		m_enemies[i]->SetBoardHeight(BOARD_HEIGHT);
+
+		m_enemies[i]->SetBulletVector(m_bullets);  // Pass the bullet vector to enemies
 	}
 }
 
@@ -375,3 +396,14 @@ HealthPack* GameBoard::GetHealthPack(Vector3 position)
 
 	return NULL;  // This should not happen
 }
+
+void GameBoard::GenerateBullets()
+{
+	for (int i = 0; i < 80; i++)
+	{
+		// Make their location far below the map
+		m_bullets.push_back(new Bullet(m_meshManager->GetMesh("Assets/Meshes/bullet.obj"),
+			m_texturedShader, m_textureManager->GetTexture("Assets/Textures/tile_white.png"), Vector3(0.0f, -10.0f, 0.0f)));
+	}
+}
+

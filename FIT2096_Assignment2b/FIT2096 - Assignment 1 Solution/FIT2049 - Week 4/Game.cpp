@@ -274,15 +274,6 @@ void Game::CheckGameOver()
 	{
 		msg = "You've run out of health.";
 	}
-	// In this game we don't limit player's moves
-	/*else if (m_player->GetMovesRemaining() <= 0)
-	{
-		msg = "You've used up all your moves.";
-	}*/
-	else if (m_player->GetIsTrapped())
-	{
-		msg = "You're trapped.";
-	}
 
 	// The only win condition
 	else if (m_player->GetNumberOfMonstersDefeated() == 5)

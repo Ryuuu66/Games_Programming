@@ -27,24 +27,18 @@ private:
 	
 	// Which board is the player currently on
 	GameBoard* m_currentBoard;
+	std::vector<Bullet*> m_bullets;
 
 	// Game variables
 	float m_health;
 	int m_score;
 	int m_monstersDefeated;
-	bool m_isTrapped;
 
 	// Ask the GameBoard if we are allowed to move to a particular tile
 	bool CanMoveHere(Vector3 target);
-
-	// Check if surrounding cells are walkable
-	void CheckIfTrapped();
 	
 	// Housekeeping after we receive input
 	void FinishTurn();
-
-	// Check what type of tile is beneth us and react
-	void ReactToTile();
 
 	// Used to spawn the player in a random position and teleport between blue tiles
 	void TeleportToTileOfType(TileType type);
@@ -83,7 +77,6 @@ public:
 
 
 	// The Game class will use these to determine if the game should end
-	bool GetIsTrapped() { return m_isTrapped; }
 	float GetHealth() { return m_health; }
 
 	// Game will use these to output info to the player

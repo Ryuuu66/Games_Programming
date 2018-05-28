@@ -43,6 +43,8 @@ private:
 	int enemyTileCount = 0;  // Keep track of how many enemy tile has been spawned
 
 	void GenerateHealthPacks();  // Generate health packs on all health tiles
+
+	void GenerateBullets();  // Generate bullets to be used
 	
 public:
 	GameBoard();
@@ -68,7 +70,7 @@ public:
 	int GetEnemyTileCount() { return enemyTileCount; }
 
 	std::vector<Enemy*> getEnemyVector() { return m_enemies; }
-
+	std::vector<Bullet*> getBulletVector() { return m_bullets; }
 };
 
 #endif

@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "Bullet.h"
+#include <vector>
 
 class Enemy : public GameObject
 {
@@ -15,6 +16,7 @@ private:
 	int m_skill;
 	bool m_isAlive;
 	CBoundingBox m_boundingBox;
+	std::vector<Bullet*> m_bullets;  // Enemy will also know the vector of bullets
 
 	// Use them to make sure the enemy choose a point on the board
 	float Board_Width;  
@@ -22,13 +24,18 @@ private:
 
 	// The movement of enemy
 	Vector3 m_randomPoint;
-	bool isMoving = false;
+	bool m_isMoving;
 	float m_moveSpeed;
 	int m_moveLogic;
 
 	// Enemy must look at the player
 	Vector3 m_playerPosition;
 
+	// Function to be called in Update function, a bullet will shoot out
+	void Shoot();
+	float shootCounter;  // Enemy will only shoot when the counter reach 0
+
+	// Helper functions
 	float RandomRange(float min, float max);
 
 public:
@@ -51,6 +58,12 @@ public:
 	void move5();
 
 
+	// Collisions with other objects (Enemy doesn't need to know the collision with enemy)
+	void OnBulletCollisionEnter(Bullet* other);  // Take damage here
+	void OnBulletCollisionStay(Bullet* other);
+	void OnBulletCollisionExit(Bullet* other);
+
+
 	// Accessors
 	bool IsAlive() { return m_isAlive; }
 	int GetSkill() { return m_skill; }
@@ -61,6 +74,7 @@ public:
 	void SetPlayerPosition(Vector3 newPos) { m_playerPosition = newPos; }
 	void SetBoardWidth(int width) { Board_Width = (float) width; }
 	void SetBoardHeight(int height) { Board_Height = (float) height; }
+	void SetBulletVector(std::vector<Bullet*> the_vector) { m_bullets = the_vector; }
 };
 
 

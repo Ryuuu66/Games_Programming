@@ -12,8 +12,6 @@ class FirstPersonCamera : public Camera
 private:
 	InputController* m_input;
 
-
-
 	float m_moveSpeed;
 	float m_rotationSpeed;
 	float m_heightChangeSpeed;
