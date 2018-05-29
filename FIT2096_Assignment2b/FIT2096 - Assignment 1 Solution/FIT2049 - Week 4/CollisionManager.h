@@ -35,11 +35,12 @@ private:
 	// Collision check helpers
 	void PlayerToEnemy();
 	void PlayerToBullet();
-	void PlayerToHealthPack();
 	void EnemyToBullet();
+	void PlayerToHealthPack();
+
 
 public:
-	CollisionManager(std::vector<Player*>* players, std::vector<Enemy*>* enemies);
+	CollisionManager(std::vector<Player*>* players, std::vector<Enemy*>* enemies, std::vector<Bullet*>* bullets, std::vector<HealthPack*>* healthPacks);
 	void CheckCollisions();
 
 };

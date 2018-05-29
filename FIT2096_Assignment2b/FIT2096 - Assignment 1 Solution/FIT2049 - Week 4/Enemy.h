@@ -28,6 +28,13 @@ private:
 	float m_moveSpeed;
 	int m_moveLogic;
 
+	// Different enemies have different moving logic
+	void move1();
+	void move2();
+	void move3();
+	void move4();
+	void move5();
+
 	// Enemy must look at the player
 	Vector3 m_playerPosition;
 
@@ -45,18 +52,9 @@ public:
 	Enemy(int newHealth, int newSkill, int newMoveLogic, Mesh* mesh, Shader* shader, Texture* texture);
 	~Enemy();
 
-	int Attack();
 	void takeDamage(int amount);
 
 	void Update(float timestep);
-
-	// Different enemies have different moving logic
-	void move1();
-	void move2();
-	void move3();
-	void move4();
-	void move5();
-
 
 	// Collisions with other objects (Enemy doesn't need to know the collision with enemy)
 	void OnBulletCollisionEnter(Bullet* other);  // Take damage here

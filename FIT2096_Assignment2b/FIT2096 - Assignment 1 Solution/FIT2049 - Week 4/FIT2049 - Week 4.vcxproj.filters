@@ -55,11 +55,14 @@
     <Filter Include="Source Files\Game\GameObjects\Character">
       <UniqueIdentifier>{1f287c02-8e90-4073-ad09-c03d2ffa8771}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Camera">
+      <UniqueIdentifier>{3016ca9f-d408-4e76-87e9-442b4390f6f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Camera">
+      <UniqueIdentifier>{97ae1108-ef7c-429a-88fa-17d823e3a604}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Direct3D.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -102,9 +105,6 @@
     <ClCompile Include="Monster.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
-    <ClCompile Include="FirstPersonCamera.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Collisions.cpp">
       <Filter>Source Files\Collisions</Filter>
     </ClCompile>
@@ -120,9 +120,6 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\Game\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Source Files\Collisions</Filter>
     </ClCompile>
@@ -137,6 +134,15 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Game\GameObjects\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files\Game\GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="DirectXTK\SimpleMath.h">
       <Filter>DirectXTK</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Direct3D.h">
       <Filter>Header Files\Engine</Filter>
@@ -200,9 +203,6 @@
     <ClInclude Include="Monster.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="FirstPersonCamera.h">
-      <Filter>Header Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Collisions.h">
       <Filter>Header Files\Collisions</Filter>
     </ClInclude>
@@ -224,12 +224,6 @@
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\Game\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="StateMachine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AudioClip.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
@@ -241,6 +235,18 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files\Game\GameObjects\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="StateMachine.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstPersonCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Game\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

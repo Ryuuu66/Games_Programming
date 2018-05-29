@@ -1,9 +1,11 @@
 #include "CollisionManager.h"
 
-CollisionManager::CollisionManager(std::vector<Player*>* players, std::vector<Enemy*>* enemies)
+CollisionManager::CollisionManager(std::vector<Player*>* players, std::vector<Enemy*>* enemies, std::vector<Bullet*>* bullets, std::vector<HealthPack*>* healthPacks)
 {
 	m_players = players;
 	m_enemies = enemies;
+	m_bullets = bullets;
+	m_healthPacks = healthPacks;
 
 	// Clear our arrays to 0 (NULL)
 	memset(m_currentCollisions, 0, sizeof(m_currentCollisions));
@@ -16,7 +18,9 @@ void CollisionManager::CheckCollisions()
 {
 	// Check all collisions
 	PlayerToEnemy();
-
+	PlayerToBullet();
+	EnemyToBullet();
+	PlayerToHealthPack();
 
 	// Move all current collisions into previous
 	memcpy(m_previousCollisions, m_currentCollisions, sizeof(m_currentCollisions));
@@ -108,3 +112,183 @@ void CollisionManager::PlayerToEnemy()
 		}
 	}
 }
+
+void CollisionManager::PlayerToBullet()
+{
+	// Here we check each player against each bullet
+	for (unsigned int i = 0; i < m_players->size(); i++)
+	{
+		for (unsigned int j = 0; j < m_bullets->size(); j++)
+		{
+			// Don't need to store pointer to these objects again but favouring clarity
+			// Can't index into these directly as they're a pointer to a vector. We need to dereference them first
+			Player* player = (*m_players)[i];
+			Bullet* bullet = (*m_bullets)[j];
+
+			// Only check collision if a bullet is being used
+			if (bullet->GetBeingUsed())
+			{
+				CBoundingBox playerBounds = player->GetBounds();
+				CBoundingBox bulletBounds = bullet->GetBounds();
+
+				// Are they colliding this frame?
+				bool isColliding = CheckCollision(playerBounds, bulletBounds);
+
+				// Were they colliding last frame?
+				bool wasColliding = ArrayContainsCollision(m_previousCollisions, player, bullet);
+
+				// For this part, enemy doesn't need to know it collides with a player
+				// But a player must know it collides with an enemy
+				if (isColliding)
+				{
+					// Register the collision
+					AddCollision(player, bullet);
+
+					if (wasColliding)
+					{
+						// Collision Stay
+						player->OnBulletCollisionStay(bullet);
+						bullet->OnPlayerCollisionStay(player);
+					}
+					else
+					{
+						// Collision Enter
+						player->OnBulletCollisionEnter(bullet);
+						bullet->OnPlayerCollisionEnter(player);
+					}
+				}
+				else
+				{
+					if (wasColliding)
+					{
+						// Collision Exit
+						player->OnBulletCollisionExit(bullet);
+						bullet->OnPlayerCollisionExit(player);
+					}
+				}
+			}
+		}
+	}
+}
+
+void CollisionManager::EnemyToBullet()
+{
+	// Here we check each enemy against each bullet
+	for (unsigned int i = 0; i < m_enemies->size(); i++)
+	{
+		for (unsigned int j = 0; j < m_bullets->size(); j++)
+		{
+			// Don't need to store pointer to these objects again but favouring clarity
+			// Can't index into these directly as they're a pointer to a vector. We need to dereference them first
+			Enemy* enemy = (*m_enemies)[i];
+			Bullet* bullet = (*m_bullets)[j];
+
+			// Only check collision if a bullet is being used
+			if (bullet->GetBeingUsed())
+			{
+				CBoundingBox enemyBounds = enemy->GetBounds();
+				CBoundingBox bulletBounds = bullet->GetBounds();
+
+				// Are they colliding this frame?
+				bool isColliding = CheckCollision(enemyBounds, bulletBounds);
+
+				// Were they colliding last frame?
+				bool wasColliding = ArrayContainsCollision(m_previousCollisions, enemy, bullet);
+
+				// For this part, enemy doesn't need to know it collides with a player
+				// But a player must know it collides with an enemy
+				if (isColliding)
+				{
+					// Register the collision
+					AddCollision(enemy, bullet);
+
+					if (wasColliding)
+					{
+						// Collision Stay
+						enemy->OnBulletCollisionStay(bullet);
+						bullet->OnEnemyCollisionStay(enemy);	
+					}
+					else
+					{
+						// Collision Enter
+						enemy->OnBulletCollisionEnter(bullet);
+						bullet->OnEnemyCollisionEnter(enemy);
+					}
+				}
+				else
+				{
+					if (wasColliding)
+					{
+						// Collision Exit
+						enemy->OnBulletCollisionExit(bullet);
+						bullet->OnEnemyCollisionExit(enemy);
+					}
+				}
+			}
+
+		}
+
+	}
+}
+
+void CollisionManager::PlayerToHealthPack()
+{
+	// Here we check each player against each health pack
+	for (unsigned int i = 0; i < m_players->size(); i++)
+	{
+		for (unsigned int j = 0; j < m_healthPacks->size(); j++)
+		{
+			// Don't need to store pointer to these objects again but favouring clarity
+			// Can't index into these directly as they're a pointer to a vector. We need to dereference them first
+			Player* player = (*m_players)[i];
+			HealthPack* healthPack = (*m_healthPacks)[j];
+
+			// Only check collision if a health pack is available
+			if (!healthPack->GetIsUsed())
+			{
+				CBoundingBox playerBounds = player->GetBounds();
+				CBoundingBox healthBounds = healthPack->GetBounds();
+
+				// Are they colliding this frame?
+				bool isColliding = CheckCollision(playerBounds, healthBounds);
+
+				// Were they colliding last frame?
+				bool wasColliding = ArrayContainsCollision(m_previousCollisions, player, healthPack);
+
+				// For this part, enemy doesn't need to know it collides with a player
+				// But a player must know it collides with an enemy
+				if (isColliding)
+				{
+					// Register the collision
+					AddCollision(player, healthPack);
+
+					if (wasColliding)
+					{
+						// Collision Stay
+						player->OnHealthPackCollisionStay(healthPack);
+						healthPack->OnPlayerCollisionStay();
+					}
+					else
+					{
+						// Collision Enter
+						player->OnHealthPackCollisionEnter(healthPack);
+						healthPack->OnPlayerCollisionEnter();
+					}
+				}
+				else
+				{
+					if (wasColliding)
+					{
+						// Collision Exit
+						player->OnHealthPackCollisionExit(healthPack);
+						healthPack->OnPlayerCollisionExit();
+					}
+				}
+
+			}
+
+		}
+
+	}
+}
+

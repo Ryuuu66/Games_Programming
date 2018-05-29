@@ -10,8 +10,9 @@ Bullet::Bullet(Mesh* mesh, Shader* shader, Texture* texture, Vector3 position)
 	m_boundingBox = CBoundingBox(m_position + m_mesh->GetMin(), m_position + m_mesh->GetMax());
 
 	m_flyTowards = Vector3::Zero;
-}
 
+	m_master = NULL;
+}
 
 void Bullet::Update(float timestep)
 {
@@ -37,3 +38,44 @@ void Bullet::Update(float timestep)
 	m_boundingBox.SetMin(m_position + m_mesh->GetMin());
 	m_boundingBox.SetMax(m_position + m_mesh->GetMax());
 }
+
+
+// Collisions
+void Bullet::OnEnemyCollisionEnter(GameObject* other)
+{
+	OutputDebugString("Bullet-Enemy Collision Enter\n");
+}
+
+void Bullet::OnEnemyCollisionStay(GameObject* other)
+{
+	OutputDebugString("Bullet-Enemy Collision Stay\n");
+}
+
+void Bullet::OnEnemyCollisionExit(GameObject* other)
+{
+	OutputDebugString("Bullet-Enemy Collision Exit\n");
+
+	isBeingUsed = false;
+	m_position = initialPosition;
+	m_timeInAir = 0.0f;  // Reset time in air
+}
+
+void Bullet::OnPlayerCollisionEnter(GameObject* other)
+{
+	OutputDebugString("Bullet-Player Collision Enter\n");
+}
+
+void Bullet::OnPlayerCollisionStay(GameObject* other)
+{
+	OutputDebugString("Bullet-Player Collision Stay\n");
+}
+
+void Bullet::OnPlayerCollisionExit(GameObject* other)
+{
+	OutputDebugString("Bullet-Player Collision Exit\n");
+
+	isBeingUsed = false;
+	m_position = initialPosition;
+	m_timeInAir = 0.0f;  // Reset time in air
+}
+

@@ -18,6 +18,9 @@ private:
 
 	Vector3 m_flyTowards;
 
+	// Masters
+	GameObject* m_master;
+
 public:
 
 	Bullet(Mesh* mesh, Shader* shader, Texture* texture, Vector3 position);
@@ -33,15 +36,17 @@ public:
 	void OnPlayerCollisionEnter(GameObject* other);
 	void OnPlayerCollisionStay(GameObject* other);
 	void OnPlayerCollisionExit(GameObject* other);
-
+	
 	// Accessors
 	CBoundingBox GetBounds() { return m_boundingBox; }
 	bool GetBeingUsed() { return isBeingUsed; }
 	Vector3 GetFlyTowards() { return m_flyTowards; }
+	GameObject* GetMaster() { return m_master; }
 
 	// Mutators
 	void SetBeingUsed(bool value) { isBeingUsed = value; }
 	void SetFlyTowards(Vector3 direction) { m_flyTowards = direction; }
+	void SetMaster(GameObject* master) { m_master = master; }
 
 };
 

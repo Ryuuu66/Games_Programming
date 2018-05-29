@@ -16,10 +16,11 @@
 class Player : public GameObject
 {
 private:
+	const float MaxHealth = 100.0f;
+
 	// A Player should listen for its own input
 	InputController* m_input;
 	CBoundingBox m_boundingBox;
-
 
 	// We'll be animating our movement so a second position is required
 	Vector3 m_targetPosition;
@@ -33,9 +34,6 @@ private:
 	float m_health;
 	int m_score;
 	int m_monstersDefeated;
-
-	// Ask the GameBoard if we are allowed to move to a particular tile
-	bool CanMoveHere(Vector3 target);
 	
 	// Housekeeping after we receive input
 	void FinishTurn();
@@ -43,11 +41,14 @@ private:
 	// Used to spawn the player in a random position and teleport between blue tiles
 	void TeleportToTileOfType(TileType type);
 
+	// Function to be called in Update function, a bullet will shoot out
+	void Shoot();
+	float shootCounter;  // Player can only shoot once in certain time period
+
 	// For Monster battles
-	int Attack();
 	void takeDamage(int amount);
-	// void DoMonsterBattle();  // This function is not used in this game
-	void DoBattle(Enemy* currentEnemy);
+
+	void CheckWinCondition();  // Used to check if defeated all enemies
 
 public:
 	Player();
@@ -56,10 +57,7 @@ public:
 
 	void Update(float timestep);
 
-	// Function to be called in Update function, a bullet will shoot out
-	void Shoot();
-
-
+	
 
 
 	// Collisions of player with other objects
@@ -85,6 +83,9 @@ public:
 
 	// Accessors
 	CBoundingBox GetBounds() { return m_boundingBox; }
+
+	// Mutators
+	void addMonster() { m_monstersDefeated += 1; }
 
 };
 

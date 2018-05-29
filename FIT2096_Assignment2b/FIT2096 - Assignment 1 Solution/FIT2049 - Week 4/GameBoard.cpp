@@ -74,21 +74,15 @@ void GameBoard::Update(float timestep)
 	// Update enemies
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
-		if (m_enemies[i]->IsAlive())
-		{
-			// Enemies update current player position
-			m_enemies[i]->SetPlayerPosition(currentPlayerPosition);
+		// Enemies update current player position
+		m_enemies[i]->SetPlayerPosition(currentPlayerPosition);
 
-			m_enemies[i]->Update(timestep);
-		}
+		m_enemies[i]->Update(timestep);
 	}
 	// Update HealthPacks
 	for (int i = 0; i < m_healthPacks.size(); i++)
-	{
-		if (!m_healthPacks[i]->GetIsUsed())
-		{
-			m_healthPacks[i]->Update(timestep);
-		}
+	{		
+		m_healthPacks[i]->Update(timestep);
 	}
 	// Update Bullets
 	for (int i = 0; i < m_bullets.size(); i++)
@@ -234,11 +228,6 @@ void GameBoard::AddWalls()
 	}
 }
 
-void GameBoard::DeactivateTile(int x, int z)
-{
-	m_tiles[z][x]->SetType(TileType::DISABLED);
-}
-
 TileType GameBoard::GetTileTypeForPosition(int x, int z)
 {
 	// Index directly into our 2D array using the passed in position.
@@ -362,6 +351,20 @@ Enemy* GameBoard::GetEnemy(Vector3 position)
 	return NULL;  // This should not happen
 }
 
+int GameBoard::GetDeadEnemyAmount()
+{
+	int deadEnemies = 0;
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		if (!m_enemies[i]->IsAlive())
+		{
+			deadEnemies += 1;
+		}
+	}
+
+	return deadEnemies;
+}
+
 void GameBoard::GenerateHealthPacks()
 {
 	for (unsigned int z = 0; z < BOARD_HEIGHT; z++)
@@ -376,6 +379,8 @@ void GameBoard::GenerateHealthPacks()
 
 				h1->SetPosition(m_tiles[z][x]->GetPosition());
 				h1->SetYPosition(0.0f);
+
+				h1->SetSpawnPoint(h1->GetPosition());  // Let healthpack knows their spawn point at here
 
 				m_healthPacks.push_back(h1);
 			}

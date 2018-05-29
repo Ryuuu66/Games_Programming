@@ -43,7 +43,6 @@ private:
 	int enemyTileCount = 0;  // Keep track of how many enemy tile has been spawned
 
 	void GenerateHealthPacks();  // Generate health packs on all health tiles
-
 	void GenerateBullets();  // Generate bullets to be used
 	
 public:
@@ -54,7 +53,6 @@ public:
 	void Update(float timestep);
 	void Render(Direct3D* renderer, Camera* camera);
 
-	void DeactivateTile(int x, int z);
 	TileType GetTileTypeForPosition(int x, int z);
 	Tile* GetRandomTileOfType(TileType type);
 	Tile* GetEmptyEnemyTile(TileType type);  // Used to find an empty red tile to spawn an enemy
@@ -68,9 +66,11 @@ public:
 	// Accessors
 	Vector3 GetCurrentPlayerPosition() { return currentPlayerPosition; }
 	int GetEnemyTileCount() { return enemyTileCount; }
+	int GetDeadEnemyAmount();  // Used to check if all enemies are dead
 
 	std::vector<Enemy*> getEnemyVector() { return m_enemies; }
 	std::vector<Bullet*> getBulletVector() { return m_bullets; }
+	std::vector<HealthPack*> getHealthPackVector() { return m_healthPacks; }
 };
 
 #endif

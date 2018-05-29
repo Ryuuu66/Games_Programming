@@ -11,6 +11,7 @@
 #define GAME_H
 
 #include "AudioSystem.h"
+#include "Button.h"
 #include "Direct3D.h"
 #include "Camera.h"
 #include "Enemy.h"
@@ -39,12 +40,22 @@ private:
 	{
 		MENU_STATE,
 		GAMEPLAY_STATE,
+		TIMETRIAL_STATE,
 		PAUSE_STATE,
 	};
 
 	// Our state machine is a generic class (we need to tell it what types it manages).
 	// It knows about two things - our states, and also who ownes those states.
 	StateMachine<GameStates, Game>* m_stateMachine;
+
+	// MENU State
+	Button* m_startButton;
+	Button* m_timeTrialButton;
+	Button* m_quitButton;
+	
+	// TIMETRIAL State
+	float m_countDown;
+	bool m_isTimeTrial;
 
 	// Game audio system
 	AudioSystem* m_audio;
@@ -62,12 +73,11 @@ private:
 	// Our game data. The Game class only needs to manage three objects for this game.
 	GameBoard* m_gameBoard;
 	Player* m_player;
-
+	// Pass these to collision manager
 	std::vector<Player*> m_players;
 	std::vector<Enemy*> m_enemies;
 	std::vector<Bullet*> m_bullets;
-	
-	
+	std::vector<HealthPack*> m_healthPacks;	
 
 	// Sprites / Text Fonts
 	Texture* m_HealthBarSprite;
@@ -78,6 +88,7 @@ private:
 	// Wide strings use more than 8 bits per character so they can capture more symbols
 	// Windows loves them and as such so does Direct3D and its text helpers
 	std::wstring m_playerScoreText;
+	std::wstring m_countDownTimerText;
 
 
 	// Splitting initialisation up into several steps
@@ -88,15 +99,42 @@ private:
 	bool LoadTextures();
 	void LoadFonts();
 	void InitGameWorld();
+	void InitStates();
 	
 
 	// UI drawing helpers
 	void InitUI();
-	void DrawUI();
+	void DrawMenuUI();
+	void DrawGameUI();
+	void DrawPauseUI();
 	void RefreshUI();
+	void BeginUI();
+	void EndUI();
 
-	
+
 	void CheckGameOver();
+
+	// Every state in our game will have four callbacks
+	// We register these with the StateMachine and it calls them for us
+	void Menu_OnEnter();
+	void Menu_OnUpdate(float timestep);
+	void Menu_OnRender();
+	void Menu_OnExit();
+
+	void Gameplay_OnEnter();
+	void Gameplay_OnUpdate(float timestep);
+	void Gameplay_OnRender();
+	void Gameplay_OnExit();
+
+	void Timetrial_OnEnter();
+	void Timetrial_OnUpdate(float timestep);
+	void Timetrial_OnRender();
+	void Timetrial_OnExit();
+
+	void Pause_OnEnter();
+	void Pause_OnUpdate(float timestep);
+	void Pause_OnRender();
+	void Pause_OnExit();
 
 public:
 	Game();	

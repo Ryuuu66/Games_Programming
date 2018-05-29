@@ -49,19 +49,19 @@ Enemy::Enemy(int newHealth, int newSkill, int newMoveLogic, Mesh* mesh, Shader* 
 	// Move speed of enemy depends on their move logic
 	if (m_moveLogic == 1)
 	{
-		m_moveSpeed = 0.005f;
+		m_moveSpeed = 0.05f;
 	}
 	else if (m_moveLogic == 2)
 	{
-		m_moveSpeed = 0.004f;
+		m_moveSpeed = 0.04f;
 	}
 	else if (m_moveLogic == 3)
 	{
-		m_moveSpeed = 0.003f;
+		m_moveSpeed = 0.03f;
 	}
 	else if (m_moveLogic == 4)
 	{
-		m_moveSpeed = 0.002f;
+		m_moveSpeed = 0.02f;
 	}
 	else if (m_moveLogic == 5)
 	{
@@ -73,14 +73,6 @@ Enemy::~Enemy()
 {
 
 }
-
-
-int Enemy::Attack()
-{
-	// A enemy's attack power is limited to its skill
-	return MathsHelper::RandomRange(0, m_skill);
-}
-
 
 void Enemy::takeDamage(int amount)
 {
@@ -95,44 +87,46 @@ void Enemy::takeDamage(int amount)
 
 void Enemy::Update(float timestep)
 {
-	// TODO Let enemy faces the player
-	Vector3 directionToPlayer = m_playerPosition - m_position;
-	// Normalize vector
-	directionToPlayer.Normalize();
-	// Calculate the angle the enemy should be facing
-	// There are a couple of ways to do this, atan2 is fairly straightforward
-	m_rotY = atan2(directionToPlayer.x, directionToPlayer.z);
+	if (IsAlive())
+	{
+		// TODO Let enemy faces the player
+		Vector3 directionToPlayer = m_playerPosition - m_position;
+		// Normalize vector
+		directionToPlayer.Normalize();
+		// Calculate the angle the enemy should be facing
+		// There are a couple of ways to do this, atan2 is fairly straightforward
+		m_rotY = atan2(directionToPlayer.x, directionToPlayer.z);
 
+		// Handle the movement of enemies
+		if (m_moveLogic == 1)
+		{
+			move1();
+		}
+		else if (m_moveLogic == 2)
+		{
+			move2();
+		}
+		else if (m_moveLogic == 3)
+		{
+			move3();
+		}
+		else if (m_moveLogic == 4)
+		{
+			move4();
+		}
+		else if (m_moveLogic == 5)
+		{
+			move5();
+		}
 
-	// Handle the movement of enemies
-	if (m_moveLogic == 1)
-	{
-		move1();
-	}
-	else if (m_moveLogic == 2)
-	{
-		move2();
-	}
-	else if (m_moveLogic == 3)
-	{
-		move3();
-	}
-	else if (m_moveLogic == 4)
-	{
-		move4();
-	}
-	else if (m_moveLogic == 5)
-	{
-		move5();
-	}
+		// Handle the shooting of enemy
+		shootCounter -= timestep;
 
-	// Handle the shooting of enemy
-	shootCounter -= timestep;
-
-	if (shootCounter <= 0.0f)
-	{
-		Shoot();
-		shootCounter = 5.0f;
+		if (shootCounter <= 0.0f)
+		{
+			Shoot();
+			shootCounter = 5.0f;
+		}
 	}
 
 	// Keep bounds up to date with position
@@ -170,7 +164,13 @@ void Enemy::move2()
 
 	directionToPlayer.Normalize();
 
-	m_position -= directionToPlayer * m_moveSpeed;
+	Vector3 targetPosition = m_position - directionToPlayer * m_moveSpeed;
+
+	if (targetPosition.x >= 1.0f && targetPosition.x <= Board_Width - 1
+		&& targetPosition.z >= 1.0f && targetPosition.z <= Board_Height - 1)
+	{
+		m_position -= directionToPlayer * m_moveSpeed;
+	}
 }
 
 // Constantly moving to a random point on the board
@@ -184,7 +184,7 @@ void Enemy::move3()
 
 		float distanceToPoint = Vector3::Distance(m_position, m_randomPoint);
 		// Stop moving if close enough
-		if (distanceToPoint <= 0.01f)
+		if (distanceToPoint <= 0.1f)
 		{
 			m_isMoving = false;
 		}
@@ -268,7 +268,7 @@ void Enemy::Shoot()
 	if (the_bullet)
 	{
 		// Offset from pivot of enemy to the gun
-		Vector3 m_offset = Vector3(-0.133f, 1.2f, 0.137f);
+		Vector3 m_offset = Vector3(-0.133f, 1.2f, 1.137f);
 
 		Matrix heading = Matrix::CreateRotationY(m_rotY);
 
@@ -305,6 +305,16 @@ float Enemy::RandomRange(float min, float max)
 void Enemy::OnBulletCollisionEnter(Bullet* other)
 {
 	OutputDebugString("Enemy-Bullet Collision Enter\n");
+
+	int damage = rand() % 6 + 3;  // Damage to enemy is between 3 - 8
+
+	takeDamage(damage);
+
+	// If enemy got killed, move them to other position
+	if (!IsAlive())
+	{
+		m_position = Vector3(10.0f, -10.0f, 0.0f);  // Sink the enemy to the ground
+	}
 }
 
 void Enemy::OnBulletCollisionStay(Bullet* other)

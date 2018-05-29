@@ -5,18 +5,20 @@
 Player::Player()
 {
 	m_input = NULL;
-	m_moveSpeed = 5.0f;
+	m_moveSpeed = 7.0f;
 	m_currentBoard = NULL;
 	m_health = 100.0f;
 	m_score = 0;
 	m_monstersDefeated = 0;
+
+	shootCounter = 0.0f;
 }
 
 Player::Player(Mesh* mesh, Shader* shader, Texture* texture, InputController* input, GameBoard* board)
 	: GameObject(mesh, shader, texture, Vector3::Zero)
 {
 	m_input = input;
-	m_moveSpeed = 5.0f;
+	m_moveSpeed = 7.0f;
 	m_currentBoard = board;
 	m_health = 100.0f;
 	m_score = 0;
@@ -24,6 +26,7 @@ Player::Player(Mesh* mesh, Shader* shader, Texture* texture, InputController* in
 
 	TeleportToTileOfType(TileType::NORMAL);
 
+	shootCounter = 0.0f;
 	m_bullets = m_currentBoard->getBulletVector();
 
 	m_boundingBox = CBoundingBox(m_position + m_mesh->GetMin(), m_position + m_mesh->GetMax());
@@ -73,74 +76,18 @@ void Player::Update(float timestep)
 		m_position += localRight * m_moveSpeed * timestep;
 	}
 	// Left mouse button to shoot
-	if (m_input->GetMouseDown(0))
+	if (m_input->GetMouseDown(0) && shootCounter <= 0.0f)
 	{
 		Shoot();
+		shootCounter = 1.0f;
 	}
+	shootCounter -= timestep;
 
 	// Keep bounds up to date with position
 	m_boundingBox.SetMin(m_position + m_mesh->GetMin());
 	m_boundingBox.SetMax(m_position + m_mesh->GetMax());
 
-	/*
-	// Constantly step towards target position
-	// Could add a distance check here, however seeing we only have one player we'll be fine
-	m_position = Vector3::Lerp(m_position, m_targetPosition, timestep * m_moveSpeed);
-	
-	// Update player position for GameBoard
-	m_currentBoard->SetCurrentPlayerPosition(m_position);
-
-	// We need to identify the frame input was received so we can perform common logic
-	// outside of the GetKeyDown IF statements below.
-	bool didJustMove = false;
-
-	if (m_input->GetKeyDown('W'))
-	{
-		if (CanMoveHere(m_targetPosition + Vector3(0, 0, 1)))
-		{
-			// Deactivate tile before we update the target position. This prevents the trail
-			// of disabled tiles from getting ahead of the player. It always disables the tile
-			// we are leaving as opposed to disabling the one we are moving onto.
-			m_currentBoard->DeactivateTile(m_targetPosition.x, m_targetPosition.z);
-			m_targetPosition += Vector3(0, 0, 1);
-			didJustMove = true;
-		}
-	}
-	if (m_input->GetKeyDown('S'))
-	{
-		if (CanMoveHere(m_targetPosition + Vector3(0, 0, -1)))
-		{
-			m_currentBoard->DeactivateTile(m_targetPosition.x, m_targetPosition.z);
-			m_targetPosition += Vector3(0, 0, -1);
-			didJustMove = true;
-		}
-	}
-	if (m_input->GetKeyDown('A'))
-	{
-		if (CanMoveHere(m_targetPosition + Vector3(-1, 0, 0)))
-		{
-			m_currentBoard->DeactivateTile(m_targetPosition.x, m_targetPosition.z);
-			m_targetPosition += Vector3(-1, 0, 0);
-			didJustMove = true;
-		}
-	}
-	if (m_input->GetKeyDown('D'))
-	{
-		if (CanMoveHere(m_targetPosition + Vector3(1, 0, 0)))
-		{
-			m_currentBoard->DeactivateTile(m_targetPosition.x, m_targetPosition.z);
-			m_targetPosition += Vector3(1, 0, 0);
-			didJustMove = true;
-		}
-	}
-
-	
-	if (didJustMove)
-	{
-		// We want to react once per move (not every frame)
-		FinishTurn();
-	}
-	*/
+	CheckWinCondition();
 
 }
 
@@ -160,20 +107,6 @@ void Player::FinishTurn()
 	*/
 
 
-	// React to tile we're standing on
-
-}
-
-bool Player::CanMoveHere(Vector3 target)
-{
-	// Asks the GameBoard for the type of the target tile
-	// We can't step onto a wall or a disabled tile
-
-	TileType targetTileType = m_currentBoard->GetTileTypeForPosition(target.x, target.z);
-
-	return targetTileType != TileType::DISABLED &&
-		   targetTileType != TileType::WALL &&
-		   targetTileType != TileType::INVALID;
 }
 
 void Player::TeleportToTileOfType(TileType type)
@@ -193,95 +126,15 @@ void Player::TeleportToTileOfType(TileType type)
 	}
 }
 
-int Player::Attack()
-{
-	// The player is much stronger than any monster on the board
-	return MathsHelper::RandomRange(0, 15);
-}
-
 void Player::takeDamage(int amount)
 {
 	// "abs" keeps a value positive
 	m_health -= abs(amount);
 }
 
-
-// This function is not used in this game
-/*
-void Player::DoMonsterBattle()
+void Player::CheckWinCondition()
 {
-	// A battle takes place within a single frame.
-
-	// Slightly hacky, but we only need a Monster when a battle is about to occur.
-	// The Player creates a Monster then fights it. Asking the GameBoard for a Monster
-	// would perhaps be a more proper way of doing this, however storing Monsters in Tiles
-	// would be unnecessary work for this implementation.
-	Monster monster = Monster();
-
-	// We keep fighting until someone dies
-	while (m_health > 0 && monster.IsAlive())
-	{
-		int playerAttackValue = Attack();
-		int monsterAttackValue = monster.Attack();
-
-		if (playerAttackValue > monsterAttackValue)
-		{
-			// Player wins the round - the monster will receive some damage
-			monster.BeHit(playerAttackValue - monsterAttackValue);
-		}
-		else
-		{
-			// Monster wins round - the player will receive some damage
-			takeDamage(monsterAttackValue - playerAttackValue);
-		}
-	}
-
-	if (!monster.IsAlive())
-	{
-		// If the player won the overall battle, increment our score
-		m_score += monster.GetSkill();
-		m_monstersDefeated++;
-	}
-}
-*/
-
-void Player::DoBattle(Enemy* currentEnemy)
-{
-	// Default state, player attack first
-	bool playerTurn = true;
-	bool enemyTurn = false;
-
-	// If both are alive, keep battle
-	while (m_health > 0 && currentEnemy->IsAlive())
-	{
-		if (playerTurn && m_health > 0)
-		{
-			int playerAttackValue = Attack();
-
-			currentEnemy->takeDamage(playerAttackValue);
-
-			playerTurn = false;
-			enemyTurn = true;
-		}
-		// Check if enemy is still alive after player's attack
-		if (enemyTurn && currentEnemy->IsAlive())
-		{
-			int enemyAttackValue = currentEnemy->Attack();
-
-			takeDamage(enemyAttackValue);
-
-			enemyTurn = false;
-			playerTurn = true;
-		}
-	}
-	// Battle ends
-
-	// If player still alive
-	if (!currentEnemy->IsAlive())
-	{
-		m_score += currentEnemy->GetSkill();
-		m_monstersDefeated += 1;
-	}
+	m_monstersDefeated = m_currentBoard->GetDeadEnemyAmount();
 }
 
 // The shoot function of a player
@@ -343,4 +196,48 @@ void Player::OnEnemyCollisionExit(Enemy* other)
 {
 	OutputDebugString("Player-Enemy Collision Exit\n");
 }
+
+void Player::OnBulletCollisionEnter(Bullet* other)
+{
+	OutputDebugString("Player-Bullet Collision Enter\n");
+
+	int damage = rand() % 10 + 5;  // Damage to player is between 5 to 14
+
+	takeDamage(damage);
+}
+
+void Player::OnBulletCollisionStay(Bullet* other)
+{
+	OutputDebugString("Player-Bullet Collision Stay\n");
+}
+
+void Player::OnBulletCollisionExit(Bullet* other)
+{
+	OutputDebugString("Player-Bullet Collision Exit\n");
+}
+
+void Player::OnHealthPackCollisionEnter(HealthPack* other)
+{
+	OutputDebugString("Player-HealthPack Collision Enter\n");
+	// Restore health
+	int health = rand() % 10 + 5;
+	
+	m_health += health;
+	
+	if (m_health > MaxHealth)
+	{
+		m_health = MaxHealth;
+	}
+}
+
+void Player::OnHealthPackCollisionStay(HealthPack* other)
+{
+	OutputDebugString("Player-HealthPack Collision Stay\n");
+}
+
+void Player::OnHealthPackCollisionExit(HealthPack* other)
+{
+	OutputDebugString("Player-HealthPack Collision Exit\n");
+}
+
 
